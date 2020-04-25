@@ -1,9 +1,6 @@
-require("dotenv").config({ path: __dirname + "/.env" });
+// require("dotenv").config({ path: __dirname + "/.env" });
 const axios = require("axios");
 const L = require("leaflet");
-
-console.log(process.env.ACCESS_KEY);
-console.log(require("dotenv").config());
 
 let loading = true;
 let loadingDiv = document.getElementById("loading");
@@ -88,21 +85,24 @@ async function loadMap() {
     document.getElementById("law1").onclick = setLaw1Color;
     document.getElementById("law2").onclick = setLaw2Color;
     document.getElementById("law3").onclick = setLaw3Color;
-    console.log(process.env.API_URL);
-    console.log(process.env.ACCESS_KEY);
+
     let myMap = L.map("mapid").setView([0, 0], 3);
-    L.tileLayer(`${process.env.API_URL}`, {
-      attribution:
-        'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      minZoom: 3,
-      maxZoom: 10,
-      zoomDelta: 0.1,
-      zoomSnap: 0,
-      id: "mapbox/streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      accessToken: process.env.ACCESS_KEY,
-    }).addTo(myMap);
+    L.tileLayer(
+      `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2hyaXNzdGFuYXJzZW5hdWx0IiwiYSI6ImNrOWY1dDV4NjA5bnczZW9iNXB4dmkzcHIifQ.03UOcpgGEfNQbYGxuVBkBQ`,
+      {
+        attribution:
+          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        minZoom: 3,
+        maxZoom: 10,
+        zoomDelta: 0.1,
+        zoomSnap: 0,
+        id: "mapbox/streets-v11",
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken:
+          "pk.eyJ1IjoiY2hyaXNzdGFuYXJzZW5hdWx0IiwiYSI6ImNrOWY1dDV4NjA5bnczZW9iNXB4dmkzcHIifQ.03UOcpgGEfNQbYGxuVBkBQ",
+      }
+    ).addTo(myMap);
 
     let worldCountries = L.geoJSON(features, {
       style: basicStyle,
