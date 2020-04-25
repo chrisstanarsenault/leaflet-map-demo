@@ -1,9 +1,8 @@
 require("dotenv").config({ path: __dirname + "/.env" });
 const axios = require("axios");
 const L = require("leaflet");
-
-console.log(process.env.ACCESS_KEY);
-console.log(require("dotenv").config());
+const fs = require("fs");
+// console.log(require("dotenv").config());
 
 let loading = true;
 let loadingDiv = document.getElementById("loading");
@@ -91,7 +90,7 @@ async function loadMap() {
     console.log(process.env.API_URL);
     console.log(process.env.ACCESS_KEY);
     let myMap = L.map("mapid").setView([0, 0], 3);
-    L.tileLayer(`${process.env.API_URL}`, {
+    L.tileLayer(process.env.API_URL, {
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       minZoom: 3,
