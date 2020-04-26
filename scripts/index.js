@@ -7,6 +7,9 @@ let loadingDiv = document.getElementById("loading");
 let buttonContainer = document.getElementById("button-container");
 let mapContainer = document.getElementById("mapid");
 let divCheck = document.getElementsByClassName("leaflet-control-container");
+let modal = document.getElementById("myModal");
+let span = document.getElementsByClassName("close")[0];
+let mText = document.getElementsByClassName("modal-text")[0];
 
 // if (divCheck.length === 0) {
 //   mapContainer.style.display = "none";
@@ -59,7 +62,7 @@ async function loadMap() {
       myMap.removeLayer(worldCountries);
       worldCountries = L.geoJSON(features, {
         style: law3Style,
-        onEachFeature: onEachFeature,
+        onEachFeature: onEachFeatureForPopupTest,
       });
       myMap.addLayer(worldCountries);
       currentStyle = law3Style;
@@ -163,7 +166,34 @@ async function loadMap() {
         .openPopup();
     };
 
+    let launchModal = (e) => {
+      console.log(e.target.feature.properties.info);
+      modal.style.display = "block";
+      if (e.target.feature.properties.law1) {
+        mText.innerHTML = e.target.feature.properties.info;
+      } else {
+        mText.innerHTML =
+          "I was too lazy to keep adding new info for this one.  Only active in Law 1";
+      }
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+      window.onclick = function (e) {
+        if (e.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    };
+
     let onEachFeature = (feature, layer) => {
+      layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: launchModal,
+      });
+    };
+
+    let onEachFeatureForPopupTest = (feature, layer) => {
       layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
