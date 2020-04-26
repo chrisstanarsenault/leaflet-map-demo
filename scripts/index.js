@@ -154,15 +154,20 @@ async function loadMap() {
       worldCountries.resetStyle(e.target);
     };
 
-    let zoomToFeature = (e) => {
-      myMap.fitBounds(e.target.getBounds());
+    let clickForPopup = (e) => {
+      // myMap.fitBounds(e.target.getBounds());
+      worldCountries
+        .bindPopup(
+          `<p>Oh hello there from ${e.target.feature.properties.ADMIN}</p>`
+        )
+        .openPopup();
     };
 
     let onEachFeature = (feature, layer) => {
       layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature,
+        click: clickForPopup,
       });
     };
     // if (divCheck.length < 0) {
