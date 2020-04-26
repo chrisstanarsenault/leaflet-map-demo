@@ -142,11 +142,10 @@ async function loadMap() {
 
       if (layer.feature.properties[currentLaw]) {
         layer.setStyle({
-          fillColor: "blue",
           weight: 5,
           color: "#666",
           dashArray: "",
-          fillOpacity: 0.7,
+          fillOpacity: 0.5,
         });
       }
     };
