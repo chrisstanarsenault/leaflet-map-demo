@@ -4,6 +4,16 @@ const L = require("leaflet");
 
 let loading = true;
 let loadingDiv = document.getElementById("loading");
+let buttonContainer = document.getElementById("button-container");
+let mapContainer = document.getElementById("mapid");
+let divCheck = document.getElementsByClassName("leaflet-control-container");
+
+// if (divCheck.length === 0) {
+//   mapContainer.style.display = "none";
+//   buttonContainer.style.display = "none";
+// } else {
+//   loadingDiv.style.display = "none";
+// }
 
 async function loadMap() {
   try {
@@ -20,24 +30,40 @@ async function loadMap() {
         : "none";
     };
 
+    let currentStyle;
+    let currentLaw;
+
     let setLaw1Color = () => {
       myMap.removeLayer(worldCountries);
       worldCountries = L.geoJSON(features, {
         style: law1Style,
+        onEachFeature: onEachFeature,
       });
       myMap.addLayer(worldCountries);
+      currentStyle = law1Style;
+      currentLaw = "law1";
     };
 
     let setLaw2Color = () => {
       myMap.removeLayer(worldCountries);
-      worldCountries = L.geoJSON(features, { style: law2Style });
+      worldCountries = L.geoJSON(features, {
+        style: law2Style,
+        onEachFeature: onEachFeature,
+      });
       myMap.addLayer(worldCountries);
+      currentStyle = law2Style;
+      currentLaw = "law2";
     };
 
     let setLaw3Color = () => {
       myMap.removeLayer(worldCountries);
-      worldCountries = L.geoJSON(features, { style: law3Style });
+      worldCountries = L.geoJSON(features, {
+        style: law3Style,
+        onEachFeature: onEachFeature,
+      });
       myMap.addLayer(worldCountries);
+      currentStyle = law3Style;
+      currentLaw = "law3";
     };
 
     let basicStyle = {
@@ -82,6 +108,8 @@ async function loadMap() {
       };
     };
 
+    currentStyle = basicStyle;
+
     document.getElementById("law1").onclick = setLaw1Color;
     document.getElementById("law2").onclick = setLaw2Color;
     document.getElementById("law3").onclick = setLaw3Color;
@@ -109,21 +137,20 @@ async function loadMap() {
     });
     myMap.addLayer(worldCountries);
 
-    // let geojson;
+    let highlightFeature = (e) => {
+      let layer = e.target;
 
-    // let highlightFeature = (e) => {
-    //   e.alert("hovered");
-    //   let layer = e.target;
-
-    //   layer.alert("hovered");
-
-    //   layer.setStyle({
-    //     weight: 5,
-    //     color: "#666",
-    //     dashArray: "",
-    //     fillOpacity: 0.7,
-    //   });
-    // };
+      if (layer.feature.properties[currentLaw]) {
+        console.log("on right spot");
+        layer.setStyle({
+          fillColor: "blue",
+          weight: 5,
+          color: "#666",
+          dashArray: "",
+          fillOpacity: 0.7,
+        });
+      }
+    };
 
     // let resetHighlight = (e) => {
     //   geojson.resetStyle(e.target);
@@ -133,25 +160,23 @@ async function loadMap() {
     //   myMap.fitBounds(e.target.getBounds());
     // };
 
-    // let onEachFeature = (feature, layer) => {
-    //   layer.on({
-    //     mouseover: highlightFeature,
-    //     mouseout: resetHighlight,
-    //     click: zoomToFeature,
-    //   });
-    // };
-
-    // geojson = L.geoJson(features, {
-    //   style: basicStyle,
-    //   onEachFeature: onEachFeature,
-    // });
-
-    loading = false;
-    if (loading) {
-      document.getElementById("mapid").style.display = "none";
-    } else {
-      loadingDiv.style.display = "none";
-    }
+    let onEachFeature = (feature, layer) => {
+      layer.on({
+        mouseover: highlightFeature,
+        // mouseout: resetHighlight,
+        // click: zoomToFeature,
+      });
+    };
+    // if (divCheck.length < 0) {
+    //   mapContainer.style.display = "none";
+    //   buttonContainer.style.display = "none";
+    //   console.log("on");
+    // } else {
+    //   loadingDiv.style.display = "none";
+    //   mapContainer.style.display = "flex";
+    //   buttonContainer.style.display = "inline-block";
+    //   console.log("off");
+    // }
   } catch (err) {
     console.log(err);
   }
