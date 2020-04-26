@@ -141,7 +141,6 @@ async function loadMap() {
       let layer = e.target;
 
       if (layer.feature.properties[currentLaw]) {
-        console.log("on right spot");
         layer.setStyle({
           fillColor: "blue",
           weight: 5,
@@ -152,19 +151,19 @@ async function loadMap() {
       }
     };
 
-    // let resetHighlight = (e) => {
-    //   geojson.resetStyle(e.target);
-    // };
+    let resetHighlight = (e) => {
+      worldCountries.resetStyle(e.target);
+    };
 
-    // let zoomToFeature = (e) => {
-    //   myMap.fitBounds(e.target.getBounds());
-    // };
+    let zoomToFeature = (e) => {
+      myMap.fitBounds(e.target.getBounds());
+    };
 
     let onEachFeature = (feature, layer) => {
       layer.on({
         mouseover: highlightFeature,
-        // mouseout: resetHighlight,
-        // click: zoomToFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature,
       });
     };
     // if (divCheck.length < 0) {
